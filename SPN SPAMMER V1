@@ -1,0 +1,372 @@
+--[[
+    SPN SPAMMER (Cleaned & Updated)
+    RolePlayName + Bio (Brookhaven) + RGB + Custom Loading + Spams
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- ==================== CONFIG ====================
+local RP_NAME = "👑⚔️SPN SPAMMER V1👑⚔️"
+local RP_BIO  = "ACCESSING BY  " .. player.Name
+
+local defaultDelay = 0.25
+
+-- ==================== SPN MESSAGES ====================
+local prefixes = {
+	"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ",
+	"#################################################################################################### ",
+	"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ",
+	"____________________________________________________________________________________________________ ",
+	"*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*•*• "
+}
+
+local words = {
+	"TMKX МЕН VOID SPELL FUN CUT  VOID FRAUD GODZILLA HYPER GODLY BLANK",
+	"TMKX MEH NOVA MASTI FRAUD FUN FACT GODZILLA MAGGI GODZILLA FRAUD DARK POWER",
+	"TMKX MEH POWER VOID SPELL HYPER GODLY BEAM JANDU BEAM POWER POWER POWER",
+	"TMKX MEH POWER BANK  WAVE OC3 GODZILLA  ML FUN FACT DARK POWER",
+	"TMKX MEH PARALLEL MAGIC GODLY BEAM FRAUD DIMENSION WAVE HYPER SPELL SPELL",
+	"TMKX MEH PARALLEL POWER WAVE VOID WORM VOID DARK POWER SPELL HYPER",
+	"TMKX MEH POWER NOVA VOID WORM OC3 GODLY BEAM GODZILLA GODZILLA VOID WORM GODLY BEAM",
+	"TMKX MEH DIMENSION POWER SPELL DIMENSION WAVE WAVE SWAMI HYPER POWER",
+	"TMKX MEH FUN FACT VOID GODZILLA FUN FACT DUDH MASTI MAGGI  BEAM PARALLEL NOVA",
+	"SPN SPAMMER AURA",
+	"SPN SPAMMER LOADED ",
+	"SPN  LEGEND OF LEGENDS",
+	"SPN AURA"
+}
+
+local emojis = {
+	"🔥", "💀", "⚡", "💎", "😈", "😆", "😔🙏", "😑", "☠️", "🚀"
+}
+
+local running = false
+local wordIndex = 1
+local prefixIndex = 1
+
+-- ==================== ROLEPLAY NAME + BIO (Brookhaven) ====================
+task.spawn(function()
+	local RE = ReplicatedStorage:WaitForChild("RE", 10)
+	if not RE then return end
+
+	local NameRemote = RE:FindFirstChild("1RPNam1eTex1t")
+	local ColorRemote = RE:FindFirstChild("1RPNam1eColo1r")
+
+	if NameRemote then
+		for i = 1, 8 do
+			pcall(function()
+				NameRemote:FireServer("RolePlayName", RP_NAME)
+				NameRemote:FireServer("RolePlayBio", RP_BIO)
+			end)
+			task.wait(0.3)
+		end
+	end
+
+	if ColorRemote then
+		while true do
+			local c = Color3.fromHSV((tick() % 5) / 5, 1, 1)
+			pcall(function()
+				ColorRemote:FireServer("PickingRPNameColor", c)
+				ColorRemote:FireServer("PickingRPBioColor", c)
+			end)
+			task.wait(0.08)
+		end
+	end
+end)
+
+-- ==================== INTRO (Black & Red Loading) ====================
+local introGui = Instance.new("ScreenGui")
+introGui.Name = "SPN_Intro"
+introGui.ResetOnSpawn = false
+introGui.IgnoreGuiInset = true
+introGui.Parent = playerGui
+
+local blackBg = Instance.new("Frame")
+blackBg.Size = UDim2.new(1, 0, 1, 0)
+blackBg.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+blackBg.BorderSizePixel = 0
+blackBg.Parent = introGui
+
+local introText = Instance.new("TextLabel")
+introText.Size = UDim2.new(1, 0, 0, 60)
+introText.Position = UDim2.new(0, 0, 0.45, 0)
+introText.BackgroundTransparency = 1
+introText.Text = "👑⚔️ SPN SPAMMER V1 ⚔️👑"
+introText.TextColor3 = Color3.fromRGB(255, 0, 0)
+introText.TextSize = 34
+introText.Font = Enum.Font.GothamBold
+introText.Parent = blackBg
+
+-- Fade out
+task.spawn(function()
+	task.wait(2.5)
+	local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+	TweenService:Create(introText, tweenInfo, {TextTransparency = 1}):Play()
+	local fadeBg = TweenService:Create(blackBg, tweenInfo, {BackgroundTransparency = 1})
+	fadeBg:Play()
+
+	fadeBg.Completed:Connect(function()
+		introGui:Destroy()
+	end)
+end)
+
+-- ==================== MAIN GUI (Small & Red Theme) ====================
+local gui = Instance.new("ScreenGui")
+gui.Name = "SPN_SpammerGui"
+gui.ResetOnSpawn = false
+gui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.fromOffset(340, 270)
+frame.Position = UDim2.new(0.5, -170, 0.5, -135)
+frame.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+
+local frameStroke = Instance.new("UIStroke")
+frameStroke.Thickness = 2
+frameStroke.Color = Color3.fromRGB(255, 0, 0)
+frameStroke.Parent = frame
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -40, 0, 40)
+title.Position = UDim2.fromOffset(14, 0)
+title.BackgroundTransparency = 1
+title.Text = "👑⚔️ SPN SPAMMER V1 ⚔️👑"
+title.TextColor3 = Color3.fromRGB(255, 0, 0)
+title.TextSize = 14
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = frame
+
+-- Minimize Button
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.fromOffset(30, 26)
+minimizeButton.Position = UDim2.new(1, -38, 0, 7)
+minimizeButton.Text = "-"
+minimizeButton.TextColor3 = Color3.fromRGB(240, 240, 240)
+minimizeButton.TextSize = 18
+minimizeButton.Font = Enum.Font.GothamBold
+minimizeButton.BackgroundColor3 = Color3.fromRGB(30, 15, 15)
+minimizeButton.Parent = frame
+Instance.new("UICorner", minimizeButton).CornerRadius = UDim.new(0, 6)
+
+-- Minimized Button (Floating)
+local miniButton = Instance.new("TextButton")
+miniButton.Size = UDim2.new(0, 110, 0, 34)
+miniButton.Position = UDim2.new(0, 15, 0.5, -17)
+miniButton.Text = "👑 SPN PANEL 👑"
+miniButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+miniButton.TextSize = 12
+miniButton.Font = Enum.Font.GothamBold
+miniButton.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
+miniButton.Visible = false
+miniButton.Parent = gui
+Instance.new("UICorner", miniButton).CornerRadius = UDim.new(0, 6)
+
+local miniStroke = Instance.new("UIStroke")
+miniStroke.Thickness = 1.5
+miniStroke.Color = Color3.fromRGB(255, 0, 0)
+miniStroke.Parent = miniButton
+
+-- Target Clan
+local targetLabel = Instance.new("TextLabel")
+targetLabel.Size = UDim2.new(0, 95, 0, 30)
+targetLabel.Position = UDim2.fromOffset(15, 52)
+targetLabel.BackgroundTransparency = 1
+targetLabel.Text = "Target Clan:"
+targetLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+targetLabel.TextSize = 13
+targetLabel.Font = Enum.Font.GothamMedium
+targetLabel.TextXAlignment = Enum.TextXAlignment.Left
+targetLabel.Parent = frame
+
+local nameBox = Instance.new("TextBox")
+nameBox.Size = UDim2.new(0, 195, 0, 32)
+nameBox.Position = UDim2.fromOffset(130, 52)
+nameBox.PlaceholderText = "Target"
+nameBox.Text = "SPN"
+nameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+nameBox.TextSize = 14
+nameBox.Font = Enum.Font.GothamBold
+nameBox.BackgroundColor3 = Color3.fromRGB(25, 18, 18)
+nameBox.ClearTextOnFocus = false
+nameBox.Parent = frame
+Instance.new("UICorner", nameBox).CornerRadius = UDim.new(0, 6)
+
+-- Delay
+local delayLabel = Instance.new("TextLabel")
+delayLabel.Size = UDim2.new(0, 95, 0, 30)
+delayLabel.Position = UDim2.fromOffset(15, 96)
+delayLabel.BackgroundTransparency = 1
+delayLabel.Text = "Delay (sec):"
+delayLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+delayLabel.TextSize = 13
+delayLabel.Font = Enum.Font.GothamMedium
+delayLabel.TextXAlignment = Enum.TextXAlignment.Left
+delayLabel.Parent = frame
+
+local delayBox = Instance.new("TextBox")
+delayBox.Size = UDim2.new(0, 195, 0, 32)
+delayBox.Position = UDim2.fromOffset(130, 96)
+delayBox.PlaceholderText = "0.25"
+delayBox.Text = tostring(defaultDelay)
+delayBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+delayBox.TextSize = 14
+delayBox.Font = Enum.Font.GothamBold
+delayBox.BackgroundColor3 = Color3.fromRGB(25, 18, 18)
+delayBox.ClearTextOnFocus = false
+delayBox.Parent = frame
+Instance.new("UICorner", delayBox).CornerRadius = UDim.new(0, 6)
+
+-- Status
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, 0, 0, 25)
+status.Position = UDim2.fromOffset(0, 142)
+status.BackgroundTransparency = 1
+status.Text = "Status: READY (Target: SPN)"
+status.TextColor3 = Color3.fromRGB(170, 170, 170)
+status.TextSize = 12
+status.Font = Enum.Font.Gotham
+status.Parent = frame
+
+-- Buttons
+local startButton = Instance.new("TextButton")
+startButton.Size = UDim2.new(0, 145, 0, 36)
+startButton.Position = UDim2.fromOffset(15, 185)
+startButton.Text = "START"
+startButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+startButton.TextSize = 14
+startButton.Font = Enum.Font.GothamBold
+startButton.BackgroundColor3 = Color3.fromRGB(190, 20, 20)
+startButton.Parent = frame
+Instance.new("UICorner", startButton).CornerRadius = UDim.new(0, 6)
+
+local stopButton = Instance.new("TextButton")
+stopButton.Size = UDim2.new(0, 145, 0, 36)
+stopButton.Position = UDim2.fromOffset(180, 185)
+stopButton.Text = "STOP"
+stopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+stopButton.TextSize = 14
+stopButton.Font = Enum.Font.GothamBold
+stopButton.BackgroundColor3 = Color3.fromRGB(90, 20, 20)
+stopButton.Parent = frame
+Instance.new("UICorner", stopButton).CornerRadius = UDim.new(0, 6)
+
+-- Minimize Logic
+minimizeButton.MouseButton1Click:Connect(function()
+	frame.Visible = false
+	miniButton.Visible = true
+end)
+
+miniButton.MouseButton1Click:Connect(function()
+	miniButton.Visible = false
+	frame.Visible = true
+end)
+
+nameBox:GetPropertyChangedSignal("Text"):Connect(function()
+	local tName = nameBox.Text
+	if tName == "" then
+		status.Text = "Status: READY"
+	else
+		status.Text = "Status: READY (Target: " .. tName .. ")"
+	end
+end)
+
+-- Chat functions
+local function getChannel()
+	local channels = TextChatService:FindFirstChild("TextChannels")
+	if channels then
+		return channels:FindFirstChild("RBXGeneral")
+	end
+	return nil
+end
+
+local function buildMessage(targetName)
+	local output = {}
+
+	-- 1. Rotating Long Head Prefix
+	table.insert(output, prefixes[prefixIndex])
+
+	-- 2. Target Name Prefix if available
+	if targetName ~= "" then
+		table.insert(output, "[" .. targetName .. "]")
+	end
+
+	-- 3. Rotating Word
+	table.insert(output, words[wordIndex])
+
+	-- 4. Random Emoji
+	local randomEmoji = emojis[math.random(1, #emojis)]
+	table.insert(output, randomEmoji)
+
+	-- Update indices for next message loop
+	prefixIndex = prefixIndex + 1
+	if prefixIndex > #prefixes then
+		prefixIndex = 1
+	end
+
+	wordIndex = wordIndex + 1
+	if wordIndex > #words then
+		wordIndex = 1
+	end
+
+	return table.concat(output, " ")
+end
+
+local function sendMessage(text)
+	local channel = getChannel()
+	if channel then
+		pcall(function()
+			channel:SendAsync(text)
+		end)
+	else
+		pcall(function()
+			local events = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+			if events and events:FindFirstChild("SayMessageRequest") then
+				events.SayMessageRequest:FireServer(text, "All")
+			end
+		end)
+	end
+end
+
+-- Start / Stop
+startButton.MouseButton1Click:Connect(function()
+	if running then return end
+
+	local targetName = nameBox.Text
+	local customDelay = tonumber(delayBox.Text) or 0.25
+	if customDelay < 0.05 then customDelay = 0.25 end
+
+	running = true
+	status.Text = "Status: RUNNING" .. (targetName ~= "" and " (Target: " .. targetName .. ")" or "")
+	status.TextColor3 = Color3.fromRGB(255, 80, 80)
+
+	task.spawn(function()
+		while running do
+			local message = buildMessage(targetName)
+			sendMessage(message)
+			task.wait(customDelay)
+		end
+	end)
+end)
+
+stopButton.MouseButton1Click:Connect(function()
+	running = false
+	local targetName = nameBox.Text
+	status.Text = "Status: STOPPED (Target: " .. (targetName ~= "" and targetName or "NONE") .. ")"
+	status.TextColor3 = Color3.fromRGB(255, 150, 150)
+end)
+
+print("👑 SPN SPAMMER V1 (Red Compact Edition) loaded successfully! 👑")
